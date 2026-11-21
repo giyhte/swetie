@@ -1,0 +1,13 @@
+name: build-exe
+on: [workflow_dispatch, push]
+jobs:
+  exe:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install pillow minecraft-launcher-lib pyinstaller
+      - run: pyinstaller --onefile --windowed --name SweetieFox --icon assets/icon.ico --add-data "assets;assets" --add-data "modsrc;modsrc" --collect-submodules pl SweetieFox.pyw
+      - uses: actions/upload-artifact@v4
+        with: { name: SweetieFox-exe, path: dist/SweetieFox.exe }
